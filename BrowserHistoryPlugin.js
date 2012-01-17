@@ -1,3 +1,31 @@
+/***
+|Name|BrowserHistoryPlugin|
+|Source|https://github.com/sbenhaim/Tin-Whiskers-TiddlyWiki-Client-Plugin-Dev/blob/master/BrowserHistoryPlugin.js|
+|Documentation|todo|
+|Version|0.1.1|
+|Author|Selah Ben-Haim|
+|License|todo|
+|~CoreVersion|todo|
+|Type|plugin|
+|Description|Show tiddlers one at a time with automatic permalink, or always open tiddlers at top/bottom of page.|
+This plugin allows you to configure TiddlyWiki to navigate more like a traditional multipage web site with only one tiddler displayed at a time.
+It fixes some of the broken functionality of Eric Shulman's SinglePageModePlugin http://www.tiddlytools.com/#SinglePageModePlugin
+!!!!!Documentation
+>see [[todo]]
+
+!!!!!Configuration
+<<<
+<<option chkBrowserHistoryMode>> Display one tiddler at a time
+><<option chkBrowserHistoryKeepFoldedTiddlers>> Don't close tiddlers that are folded
+><<option chkBrowserHistoryKeepEditedTiddlers>> Don't close tiddlers that are being edited
+<<option chkBrowserHistoryAutoScroll>> Scroll to top of tiddler automatically (doesn't work or poorly understood)
+
+<<<
+!!! Code
+***/
+
+//{{{
+
 version.extensions.BrowserHistoryPlugin= {major: 0, minor: 1, revision: 1, date: new Date(2012, 1, 7)};
 
 config.paramifiers.BHP = { onstart: function(v) {
@@ -112,3 +140,5 @@ Story.prototype.displayTiddlers = function(  ) {
 	
 	opt.chkBrowserHistoryMode = saveBHP;
 }
+
+//}}}
