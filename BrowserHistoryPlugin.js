@@ -18,7 +18,10 @@ It fixes some of the broken functionality of Eric Shulman's SinglePageModePlugin
 <<option chkBrowserHistoryMode>> Display one tiddler at a time
 ><<option chkBrowserHistoryKeepFoldedTiddlers>> Don't close tiddlers that are folded
 ><<option chkBrowserHistoryKeepEditedTiddlers>> Don't close tiddlers that are being edited
-<<option chkBrowserHistoryAutoScroll>> Scroll to top of tiddler automatically (doesn't work or poorly understood)
+
+<<option chkBrowserHistoryScrollTopTiddler>> Scroll to top of tiddler automatically
+or
+<<option chkBrowserHistoryScrollTopWindow>> Scroll to top of the window
 
 <<<
 !!! Code
@@ -40,6 +43,12 @@ if (config.options.chkBrowserHistoryKeepFoldedTiddlers == undefined)
 
 if (config.options.chkBrowserHistoryKeepEditedTiddlers == undefined)
 	config.options.chkBrowserHistoryKeepEditedTiddlers = false;
+	
+if (config.options.chkBrowserHistoryScrollTopTiddler == undefined)
+	config.options.chkBrowserHistoryScrollTopTiddler = false;
+	
+if (config.options.chkBrowserHistoryScrollTopWindow == undefined)
+	config.options.chkBrowserHistoryScrollTopWindow = false;
 
 var popped =  false;
 window.onpopstate  =  function ( e ) {
@@ -63,10 +72,13 @@ window.onpopstate  =  function ( e ) {
 	}
 }
 
+//hi-jack the displayTiddler prototype from Story.js 
 if ( Story.prototype.BHP_coreDisplayTiddler==undefined ) {
 	Story.prototype.BHP_coreDisplayTiddler=Story.prototype.displayTiddler;
 }
 
+// displayTiddler replacement
+// choose new name for original and redefine original to minimize interference with other plugins
 Story.prototype.displayTiddler = function( srcElement, tiddler, template, animate, slowly )
 {
 	var title = ( tiddler instanceof Tiddler )?tiddler.title:tiddler;
@@ -118,13 +130,17 @@ Story.prototype.displayTiddler = function( srcElement, tiddler, template, animat
 	
 	var tiddlerElem=story.getTiddler( title );
 	
-	if ( tiddlerElem&&opt.chkBrowserHistoryAutoScroll ) {
+	if ( tiddlerElem && opt.chkBrowserHistoryScrollTopTiddler ) {
 		// scroll to top of page or top of tiddler
-		var isTopTiddler=( tiddlerElem.previousSibling==null );
+		var isTopTiddler=( tiddlerElem.previousSibling==null ); // what is this for?
 		var yPos=isTopTiddler?0:ensureVisible( tiddlerElem );
 		// if animating, defer scroll until after animation completes
 		var delay=opt.chkAnimate?config.animDuration+10:0;
-		setTimeout( "window.scrollTo( 0, "+ yPos +" )", delay ); 
+		setTimeout( "window.scrollTo( 0, 0 )", 0); 
+		//setTimeout( "window.scrollTo( 0, "+ yPos +" )", delay ); 
+	}
+	else if ( tiddlerElem && opt.chkBrowserHistoryScrollTopWindow ) {
+		setTimeout( "window.scrollTo( 0, 0 )", 0); 
 	}
 }
 
