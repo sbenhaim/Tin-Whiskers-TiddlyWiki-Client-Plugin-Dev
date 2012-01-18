@@ -111,9 +111,9 @@ Story.prototype.displayTiddler = function( srcElement, tiddler, template, animat
 		}
 		else {
 			var url = encodeURIComponent( String.encodeTiddlyLink( title ) );
-			var title = wikifyPlain( "SiteTitle" ) + " - " + title;
-			document.title = title;
-			history.pushState(  {}, title, '#' + url  );
+			var docTitle = wikifyPlain( "SiteTitle" ) + " - " + title;
+			document.title = docTitle;
+			history.pushState(  {}, docTitle, '#' + url  );
 		}
 	}
 	
